@@ -1,0 +1,23 @@
+steps:
+
+  - id: "Install"
+    name: "gcr.io/cloud-builders/go"
+    args: ["install", "soma"]
+    env: ["GOPATH=."]
+
+  - id: "Test"
+    name: "gcr.io/cloud-builders/go"
+    args: ["test", "soma"]
+    env: ["GOPATH=."]
+
+  - id: "Build"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["build", "--tag=gcr.io/$PROJECT_ID/soma:$SHORT_SHA", "."]
+
+  - id: "Push"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/soma:$SHORT_SHA"]
+
+  - id: "Run"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["run", "gcr.io/$PROJECT_ID/soma:$SHORT_SHA"]
